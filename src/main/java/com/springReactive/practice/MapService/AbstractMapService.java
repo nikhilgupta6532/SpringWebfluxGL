@@ -6,6 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,4 +46,34 @@ public class AbstractMapService {
         }
         return Flux.fromIterable(allKeys);
     }
+
+    public boolean isAnagrams(String str1,String str2){
+        char[] firstString = str1.toCharArray();
+        char[] secondString = str2.toCharArray();
+
+        HashMap<Character,Integer> firstMap = new HashMap<>();
+        HashMap<Character,Integer> secondMap = new HashMap<>();
+
+        for(int i=0;i<firstString.length;i++) {
+            if(firstMap.get(firstString[i])==null) {
+                firstMap.put(firstString[i],1);
+            } else {
+                Integer a = firstMap.get(firstString[i]);
+                firstMap.put(firstString[i],++a);
+            }
+        }
+
+        for(int i=0;i<secondString.length;i++) {
+            if(secondMap.get(secondString[i])==null) {
+                secondMap.put(secondString[i],1);
+            } else {
+                Integer b = secondMap.get(secondString[i]);
+                secondMap.put(secondString[i],++b);
+            }
+        }
+
+        if(firstMap.equals(secondMap)) return true;
+        else return false;
+    }
+
 }

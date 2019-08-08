@@ -17,14 +17,25 @@ import java.time.Duration;
 @Component
 public class CommandRunner implements CommandLineRunner {
 
-    private final AbstractMapService mapService;
-
-    public CommandRunner(AbstractMapService mapService){
-        this.mapService = mapService;
+    public static Mono<String> doSomething(){
+        System.out.println("hello");
+        System.out.println("hi");
+        return Mono.just("Nikhil");
     }
 
-    @Override
+  private final AbstractMapService mapService;
+
+  public CommandRunner(AbstractMapService mapService) {
+    this.mapService = mapService;
+  }
+
+  @Override
     public void run(String... args) throws Exception {
+
+
+        boolean anagrams = mapService.isAnagrams("NIKHML", "IHKNLP");
+        System.out.println(anagrams);
+
         BaseEntity b = new BaseEntity();
         b.setFirstName("Nihkil");
         b.setLastName("Gupta");
@@ -48,7 +59,6 @@ public class CommandRunner implements CommandLineRunner {
                 error-> System.out.println("Error" + error),
                 ()-> System.out.println("Done"),
                 subscription -> subscription.request(10));
-
 
         SampleSubscriber<Integer> ss = new SampleSubscriber<Integer>();
         Flux<Integer> range1 = Flux.range(1, 4);
@@ -118,12 +128,17 @@ public class CommandRunner implements CommandLineRunner {
                   .retry(1)
                   .elapsed()
                   .subscribe(System.out::println,System.err::println);
-          Thread.sleep(250);
+          Thread.sleep(5000);
 
           Flux.error(new IllegalArgumentException())
                   .doOnError(System.out::println)
                   .retryWhen(companion->companion.take(3))
                   .subscribe();
+
+          Mono.just("hey").switchIfEmpty(doSomething());
+
+         // Mono.empty().switchIfEmpty(Mono.defer(()->doSomething()));
+
 
     }
 }

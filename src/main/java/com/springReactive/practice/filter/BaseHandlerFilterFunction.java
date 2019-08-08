@@ -16,7 +16,7 @@ public class BaseHandlerFilterFunction implements HandlerFilterFunction<ServerRe
 
     @Override
     public Mono<ServerResponse> filter(ServerRequest request, HandlerFunction<ServerResponse> next) {
-        Mono<ServerResponse> response = Mono.empty();
+        Mono<ServerResponse> response;
         if (!isAcceptHeaderJson(request)) {
             response = ServerResponse.status(HttpStatus.NOT_ACCEPTABLE.value()).build();
         } else if (isMethod(request, HttpMethod.POST.toString()) && !isContentTypeHeader(request)) {
